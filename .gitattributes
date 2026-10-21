@@ -1,0 +1,9 @@
+# Keep line endings stable on every platform
+* text=auto eol=lf
+# The Windows launcher must keep Windows (CRLF) line endings
+*.cmd text eol=crlf
+# Binary files
+*.png binary
+*.jpg binary
+# Example CSVs use Windows line endings, like the app's CSV export (for Excel)
+*.csv text eol=crlf

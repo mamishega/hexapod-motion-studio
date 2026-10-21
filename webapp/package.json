@@ -1,0 +1,17 @@
+{
+  "name": "hexapod-motion-trainer",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "node --test ../tests/*.test.mjs",
+    "start": "python3 serve.py",
+    "build": "node build.mjs"
+  },
+  "dependencies": {
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "esbuild": "0.25.12"
+  }
+}

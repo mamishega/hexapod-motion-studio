@@ -1,0 +1,8 @@
+# Installed only to rebuild the preview bundle (npm ci); not needed to run the app
+webapp/node_modules/
+# Python and OS clutter
+__pycache__/
+*.pyc
+.DS_Store
+# Release ZIPs are built from the repository, not stored in it
+*.zip

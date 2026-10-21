@@ -1,0 +1,138 @@
+HEXAPOD MOTION STUDIO - WINDOWS AND MAC
+
+Everything for movement training is in this folder. Extract the complete ZIP.
+
+START WITH OFFLINE PLANNING
+  Windows: install Python 3.8+ if needed, then double-click
+    Start Motion Studio.cmd
+  Mac: double-click Start Motion Studio.command (requires Python 3).
+    If macOS says it cannot be opened (unidentified developer), right-click
+    the file, choose Open, then Open again. Use Chrome or Edge: Safari has no
+    USB (Web Serial) support. Simulate robot works in any of them.
+  Keep the console open. If the browser does not open, use Microsoft Edge or
+  Chrome and visit http://localhost:5180.
+
+  Choose Forward, Backward, Sideways left/right, or Turn left/right.
+  "Clawer left/right" is provisionally interpreted as turning left/right.
+  The direction mapping follows assumptions from the old code and must be
+  verified against your robot's actual wiring and mounting.
+  Edit the six leg XYZ positions, pose duration and sequence.
+  Preview smoothly animates all six articulated legs using React.
+  Click again to pause/resume. Drag Preview position to inspect a moment.
+  Choose angled/top view, foot paths and 0.25x-2x preview speed.
+  Preview runs in the app only. No robot is required.
+  React is included: no Node installation is needed to run this app.
+  After updating this folder, copy the current Board Files to the board again.
+  If an older page appears, refresh with Ctrl+F5 (Windows) or
+  Command-Shift-R (Mac).
+  To stop the app on Windows, press Ctrl+C in the console; if asked
+  Terminate batch job (Y/N)?, enter Y.
+  Save in browser keeps a local library. Export JSON backs up a movement.
+  Positions CSV exports all six legs' XYZ and joint angles for every pose.
+
+TO CONNECT THE ROBOT
+  1. Keep your previous calibration folder/main.py as a backup.
+  2. In Thonny, save these FOUR files from Board Files to the board root:
+       main.py
+       FUNCTIONS.py
+       calibration_store.py
+       motion_bridge.py
+     This installs training-mode startup. Do not delete any existing
+     calibration_offsets.json; its offsets will be reused. Joint limits saved
+     from the app are stored in joint_limits.json.
+  3. Support the robot with the feet clear. Open check_and_restart.py and Run.
+     If a red error appears, copy it before proceeding.
+  4. Close Thonny completely. Reconnect USB without holding BOOTSEL.
+  5. In Motion Studio, click Connect robot and choose its USB/COM port.
+     Leg calibration is a tab in this app and uses the same board files, so
+     you no longer need to switch the board to the old calibration program.
+
+MOVEMENT TRAINING
+  Select a pose in the timeline and edit each leg's X, Y, Z in millimetres.
+  The app displays corrected hip, upper-leg and lower-leg angles.
+  Duplicate/remove poses to build your own sequence.
+  Enable at home commands ALL SIX legs to the reference pose; the first
+  movement can jump because there is no feedback about the physical position.
+  Send selected pose moves smoothly to just that pose.
+  Play runs the sequence; set Repeat (or Until stopped), Speed (up to 4x) and
+  Ease in/out below the robot buttons. Transitions can be 100-10,000 ms; use
+  All transitions > Apply to every pose to change a whole sequence.
+  The header shows battery voltage; set Low battery below ... V for a warning.
+  Simulate robot tests all of this without a board (no USB).
+  Panel 06 jogs a foot (touch-down, saves Stand trim, teaches poses), tests
+  servos to set joint limits on the board, and releases a single leg.
+  Pause / hold cancels the transition and holds the latest commanded position.
+  Disable motors cancels playback and releases all outputs.
+  Capture robot pose adds all six legs' last board-reported commanded XYZ.
+
+IMPORTANT LIMITS
+  These are commanded positions, not measured physical positions. No sensors
+  or automatic machine-learning training are present in the supplied robot.
+  Presets are draft crawl sequences, not hardware-validated walking gaits.
+  Test supported, at small stride/lift settings, before ground movement.
+  Stride goes up to 150 mm (lift 60 mm); the app names any leg that cannot
+  reach. Each crawl cycle moves the body by one stride.
+  Gait: crawl (1 leg), tripod (3 legs), or the insect gaits (tripod, ripple,
+  wave) that walk continuously like a real insect. For insect gaits set
+  Cycles, use a short Transition (150-250 ms) and leave Ease in/out off.
+  Hip swing (degrees) sizes steps as hip rotation; Hip -/+ in panel 06 (or
+  the [ and ] keys) turns one foot around its hip.
+  LIVE WALK (smoothest): with the robot enabled, press a direction in Live
+  walk. The board runs the gait and inverse kinematics itself every 20 ms, so
+  the robot walks continuously. Press other directions to steer (including
+  curves), and Stop (or X) to finish in the starting stance. Keys: W A S D,
+  Q / E turn. Copy the current Board Files to the board first.
+  Its sliders set Step height, Speed (steps per second) and Stride angle;
+  you can move them while walking and the robot blends into the new values.
+  The initial preset repositions one foot at a time and returns the supported
+  stance to home. Wiring, geometry, friction and balance affect real travel.
+  The bridge checks coordinate reachability and per-joint limits (default
+  +/-180 degrees, set in FUNCTIONS.py JOINT_LIMITS; the app uses the board's).
+  The app also rejects touching neighbouring feet and feet inside the body
+  (approximate geometry).
+  If communication stops for 3 seconds while the bridge is running, it
+  releases outputs. Keep the body supported. This is not a hardware stop.
+
+SAVING
+  Save in browser persists this computer/browser's library (up to 20 programs).
+  It does not upload a standalone program into the robot's flash.
+  Export JSON is portable; Import JSON loads a saved program without moving.
+  CSV contains per-pose target positions and corrected angles.
+  Browser storage and the ZIP include no live sensor recordings.
+
+LEG CALIBRATION TAB
+  Click the Leg calibration tab (or open http://localhost:5180/#calibrate).
+  Select a leg (this turns every servo off), adjust its three joints in
+  preview, then Enable leg & apply to hold that leg at the home reference
+  pose. Adjust in 1-degree steps or with the sliders (max 15 degrees per
+  change). Save to robot writes calibration_offsets.json; Download offsets
+  keeps a copy. New offsets apply to Motion studio immediately. Use Enable at
+  home before moving in Motion studio again. It also works with Simulate robot.
+  The old Web Leg Calibration app still works with its own board files, but
+  it is no longer needed.
+
+More details are in README.md. Tests passed with simulated hardware; physical
+motion, balance and Windows USB operation still need checking on your robot.
+
+EXAMPLE MOVEMENTS
+  Six ready-made JSON and CSV files are in Example Movements. Open CSV
+  in Excel to inspect all six legs positions and angles for every pose.
+  These example angles use default calibration, not measured board offsets.
+
+STAND AND SIT
+  Select Stand or Sit / crouch at the top to preview, edit and save a posture
+  transition. For physical movement, connect, Enable at home, then click
+  Stand or Sit / crouch under PHYSICAL ROBOT. Each uses the configured transition time (default two seconds).
+  Default heights: Stand 70 mm, Sit 30 mm (lowered crouch, not folded).
+  Motors keep holding after Sit. Disable motors is a separate action.
+  Existing training bridge files do not need updating.
+
+NEW EDITING TOOLS
+  Undo / Redo above the timeline restore the last 30 sequence edits.
+  Completed edits automatically save a draft; reloading recovers it.
+  Named saves and exported JSON remain separate backups.
+  Board-reported pose shows six read-only XYZ rows below the target editor.
+  Animation labels identify whether it shows targets or reported commands.
+  Stand / Sit settings let you adjust heights and transition time. They are
+  saved in this browser. Rebuild an existing template to use new settings.
+  Editing, Undo, Redo and draft recovery never send robot commands.
